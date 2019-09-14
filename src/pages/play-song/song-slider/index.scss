@@ -1,0 +1,20 @@
+.song-slider {
+  display: flex;
+  flex-direction: row;
+  background-color: yellow;
+  align-items: center;
+  height: 100%;
+
+  &__slider {
+    //display: flex;
+    flex: 1;
+
+  }
+
+  &__text{
+    font-size: 12px;
+    color: RGBA(55, 53, 56, 1);
+  }
+
+
+}

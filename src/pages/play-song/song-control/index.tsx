@@ -15,19 +15,20 @@ const CycleTypeString={
   [CycleType.random]:'随机',
 }
 
+type callback = () => void;
 
 type Props={
   // cycleType:CycleType,
   // isPlaying:boolean, //是否在播放
+  onPlay?:callback;
+  onPause?:callback;
+
 }
 
 type State={
   cycleType:CycleType,
   isPlaying:boolean, //是否在播放
 }
-
-const musicUrl = "http://m8.music.126.net/20190912001146/8c84b162ecf059fbeab117d3b13d46a2/ymusic/540f/0453/025f/ce4b75c2393963607599558a1f709ec9.mp3"
-
 
 export default class SongControl extends Component<Props,State> {
 
@@ -41,22 +42,6 @@ export default class SongControl extends Component<Props,State> {
   constructor(props:Props){
     super(props);
 
-    if (process.env.TARO_ENV === 'weapp') {
-
-      const backgroundAudioManager = Taro.getBackgroundAudioManager()
-      backgroundAudioManager.title = '好喜欢你'
-      backgroundAudioManager.singer = '眼中人'
-      backgroundAudioManager.coverImgUrl = 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000'
-      backgroundAudioManager.src = musicUrl;
-      this.audio = backgroundAudioManager;
-      this.audio.pause();
-
-    }else if (process.env.TARO_ENV === 'h5') {
-
-
-
-    }
-
   }
 
   state={
@@ -66,7 +51,6 @@ export default class SongControl extends Component<Props,State> {
 
 
   render() {
-
 
     const {isPlaying,cycleType} = this.state;
 
@@ -78,12 +62,11 @@ export default class SongControl extends Component<Props,State> {
         <Text> ⏮ </Text>
         <Text onClick={()=>{
 
-
           this.setState((preState)=>({isPlaying:!preState.isPlaying}),()=>{
               if(this.state.isPlaying){
-                this.audio.play();
+                this.props.onPlay && this.props.onPlay();
               }else{
-                this.audio.pause();
+                this.props.onPause && this.props.onPause();
               }
           })
 
@@ -92,12 +75,12 @@ export default class SongControl extends Component<Props,State> {
         <Text> 列表 </Text>
 
 
-        {process.env.TARO_ENV === 'h5' ?
+        {/* {process.env.TARO_ENV === 'h5' ?
           <div>
             <h1>444444222</h1>
             <audio src={musicUrl} type="audio/mpeg"></audio>
           </div>:null
-        }
+        } */}
 
       </View>
     )
